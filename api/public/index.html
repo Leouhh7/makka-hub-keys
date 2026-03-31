@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Makka Hub - Key</title>
+  <style>
+    body { background: #111; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .box { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 40px; text-align: center; max-width: 400px; }
+    h2 { color: #e91e8c; margin-bottom: 10px; }
+    .key { background: #222; border: 1px solid #e91e8c; border-radius: 8px; padding: 14px 24px; font-size: 18px; letter-spacing: 2px; margin: 20px 0; word-break: break-all; }
+    button { background: #e91e8c; border: none; color: #fff; padding: 10px 28px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; }
+    button:hover { background: #c2185b; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Makka Hub (HvH)</h2>
+    <p style="color:#888">Your unique one-time key:</p>
+    <div class="key" id="keyDisplay">Loading...</div>
+    <button onclick="copyKey()">Copy Key</button>
+    <p style="color:#555; font-size:12px; margin-top:16px">This key can only be used once. Do not share it.</p>
+  </div>
+  <script>
+    let currentKey = ""
+    fetch('/api/getkey')
+      .then(r => r.json())
+      .then(data => {
+        currentKey = data.key
+        document.getElementById('keyDisplay').textContent = data.key
+      })
+      .catch(() => {
+        document.getElementById('keyDisplay').textContent = 'Error - refresh page'
+      })
+    function copyKey() {
+      navigator.clipboard.writeText(currentKey)
+      document.querySelector('button').textContent = 'Copied!'
+      setTimeout(() => document.querySelector('button').textContent = 'Copy Key', 2000)
+    }
+  </script>
+</body>
+</html>
